@@ -173,7 +173,7 @@ not_angel:
 		and	r4, r4, #0xf8000000
 		add	r4, r4, #TEXT_OFFSET
 #else
-		ldr	r4, =zreladdr  # [lksq:20150613] bcm2709 makefile.boot 참고 -> 0x8000
+		ldr	r4, =zreladdr  @ [lksq:20150613] bcm2709 makefile.boot 참고 -> 0x8000
 #endif
 
 		/*
@@ -192,22 +192,22 @@ not_angel:
 
 restart:	adr	r0, LC0
 		ldmia	r0, {r1, r2, r3, r6, r10, r11, r12}
-		ldr	sp, [r0, #28] # [lksq:20150613] stack size 4096
+		ldr	sp, [r0, #28] @ [lksq:20150613] stack size 4096
 
 		/*
 		 * We might be running at a different address.  We need
 		 * to fix up various pointers.
 		 */
-		sub	r0, r0, r1		@ calculate the delta offset  # [lksq:20150613] TODO : offset 0 이 아닌 경우가 언제인지??
+		sub	r0, r0, r1		@ calculate the delta offset  @ [lksq:20150613] TODO : offset 0 이 아닌 경우가 언제인지??
 		add	r6, r6, r0		@ _edata
-		add	r10, r10, r0		@ inflated kernel size location # [lksq:20150613] piggy.gzip의 address -> incbin
+		add	r10, r10, r0		@ inflated kernel size location @ [lksq:20150613] piggy.gzip의 address -> incbin
 
 		/*
 		 * The kernel build system appends the size of the
 		 * decompressed kernel at the end of the compressed data
 		 * in little-endian form.
 		 */
-		ldrb	r9, [r10, #0] # [lksq:20150613] Determine uncompressed size of GZIP file -> gzip의 last 4byte
+		ldrb	r9, [r10, #0] @ [lksq:20150613] Determine uncompressed size of GZIP file -> gzip의 last 4byte
 		ldrb	lr, [r10, #1]
 		orr	r9, r9, lr, lsl #8
 		ldrb	lr, [r10, #2]
@@ -218,7 +218,7 @@ restart:	adr	r0, LC0
 #ifndef CONFIG_ZBOOT_ROM
 		/* malloc space is above the relocated stack (64k max) */
 		add	sp, sp, r0
-		add	r10, sp, #0x10000  # [lksq:20150613] heap으로 사용될 영역 지정 stack뒤 64K 로 러프하게 설정함
+		add	r10, sp, #0x10000  @ [lksq:20150613] heap으로 사용될 영역 지정 stack뒤 64K 로 러프하게 설정함
 #else
 		/*
 		 * With ZBOOT_ROM the bss/stack is non relocatable,
@@ -378,7 +378,7 @@ dtb_check_done:
 1:
 #endif
 
-# [lksq:20150613] end...........
+@ [lksq:20150613] end...........
 
 		sub	r9, r6, r5		@ size to copy
 		add	r9, r9, #31		@ rounded up to a multiple
